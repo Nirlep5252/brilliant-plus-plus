@@ -5,10 +5,9 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import CourseContent from "~/components/studio/course-content";
 import Image from "next/image";
-import { CircleX, PlusIcon, XIcon } from "lucide-react";
+import { CircleX, PlusIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import React from "react";
-import { Badge } from "~/components/ui/badge";
 import { api } from "~/trpc/react";
 
 export default function Page({ params }: { params: { courseId: string } }) {
@@ -77,42 +76,23 @@ export default function Page({ params }: { params: { courseId: string } }) {
                 </Label>
                 <Label className="flex flex-col gap-2">
                   <span className="ml-1">Tags</span>
-                  {/* <div className="flex flex-wrap gap-2">
-                    {course?.tags.map((tag, key) => (
+                  {tags.map((tag, index) => {
+                    return (
                       <div
                         className="flex w-fit gap-2 rounded-md bg-primary p-2 text-background"
-                        key={key}
+                        key={index}
                       >
                         {tag}
                         <CircleX
                           className="h-4 w-4"
                           onClick={() => {
-                            const newTags = course.tags.filter(
-                              (t) => t !== tag,
-                            );
+                            const newTags = tags.filter((t) => t !== tag);
                             setTags(newTags);
                           }}
                         />
                       </div>
-                    ))} */}
-                    {tags.map((tag, index) => {
-                      return (
-                        <div
-                          className="flex w-fit gap-2 rounded-md bg-primary p-2 text-background"
-                          key={index}
-                        >
-                          {tag}
-                          <CircleX
-                            className="h-4 w-4"
-                            onClick={() => {
-                              const newTags = tags.filter((t) => t !== tag);
-                              setTags(newTags);
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+                    );
+                  })}
                 </Label>
                 <Label className="relative flex flex-col gap-2">
                   <Input

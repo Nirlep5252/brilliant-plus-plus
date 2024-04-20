@@ -26,6 +26,16 @@ async function getTranscriptData(transcriptUrl: string) {
   return JSON.parse(text);
 }
 
+export async function getTranscript(videoUrl: string): Promise<string> {
+  const transcriptUrl = createTranscriptUrl(videoUrl);
+  const transcriptData = await getTranscriptData(transcriptUrl);
+  let finalTranscript = "";
+  for (const part of transcriptData) {
+    finalTranscript += part.transcript;
+  }
+  return finalTranscript;
+}
+
 export default async function Page({
   params,
 }: {
@@ -44,8 +54,7 @@ export default async function Page({
       </div>
     );
   }
-  const transcriptUrl = createTranscriptUrl(lesson.videoUrl);
-  const transcriptData = await getTranscriptData(transcriptUrl);
+  const transcript = await getTranscript(lesson.videoUrl);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <div className="text-2xl font-bold">{lesson.name}</div>
@@ -53,7 +62,7 @@ export default async function Page({
       <video width={1080} height={720} controls preload="none">
         <source src={lesson.videoUrl} type="video/mp4" />
       </video>
-      Transcript: {transcriptData[0].transcript}
+      Transcript: {transcript}
     </div>
   );
 }

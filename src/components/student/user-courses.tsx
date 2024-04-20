@@ -16,12 +16,12 @@ export function UserCourses() {
   const { data: myCourses } = api.course.getMyCourses.useQuery();
   return (
     myCourses && (
-      <div className="flex flex-col gap-4">
-        <h1>My Courses</h1>
-        <div className="flex flex-row gap-4">
+      <div className="flex flex-col gap-4 divide-y-2">
+        <h1 className="p-4 text-3xl font-bold text-gray-800">My Courses</h1>
+        <div className="flex flex-row gap-4 p-4">
           {myCourses.map((course) => (
             <Link href={`/dashboard/course/${course.id}`} key={course.id}>
-              <Card className="h-50 w-40">
+              <Card>
                 <CardHeader>
                   <CardTitle>{course.name}</CardTitle>
                 </CardHeader>
@@ -32,13 +32,19 @@ export function UserCourses() {
                       alt={course.name}
                       width={200}
                       height={200}
+                      className="h-48 w-72 rounded-lg"
                     />
                     <CardDescription>{course.description}</CardDescription>
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex gap-2">
                   {course.tags.map((tag) => (
-                    <span key={tag}>{tag}</span>
+                    <span
+                      className="rounded-lg bg-gray-200 px-2 py-1 text-sm"
+                      key={tag}
+                    >
+                      {tag}
+                    </span>
                   ))}
                 </CardFooter>
               </Card>
