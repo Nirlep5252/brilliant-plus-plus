@@ -93,4 +93,42 @@ export const courseRouter = createTRPCRouter({
       });
       return lessons;
     }),
+  getCourse: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const course = await ctx.db.course.findFirst({
+        where: {
+          id: input.courseId,
+        },
+      });
+      return course;
+    }),
+  updateCourse: protectedProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+        name: z.string(),
+        description: z.string(),
+        tags: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== UserRole.CREATOR) {
+        throw new Error("Only creators can update courses");
+      }
+
+      await ctx.db.course.update({
+        where: {
+          id: input.courseId,
+          creatorId: ctx.session.user.id,
+        },
+        data: {
+          name: input.name,
+          description: input.description,
+          tags: {
+            set: input.tags,
+          },
+        },
+      });
+    }),
 });

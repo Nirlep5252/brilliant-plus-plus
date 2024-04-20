@@ -29,6 +29,7 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: z.string(),
     CLOUDINARY_URL: z.string(),
     API_SECRET: z.string(),
+    GEMINI_API_KEY: z.string(),
   },
 
   /**
@@ -56,6 +57,7 @@ export const env = createEnv({
     CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
     CLOUDINARY_URL: process.env.CLOUDINARY_URL,
     API_SECRET: process.env.API_SECRET,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -55,8 +55,22 @@ export async function addCourseContent(formData: FormData, courseId: string) {
     return new Response("Unauthorized", { status: 401 });
   }
   const newFormData = new FormData();
+  const timestamp = Math.round(new Date().getTime() / 1000);
+  const signature = cloudinary.v2.utils.api_sign_request(
+    {
+      raw_convert: "google_speech",
+      timestamp,
+      // public_id: `videos-${courseId}-${timestamp}`,
+    },
+    env.CLOUDINARY_API_SECRET,
+  );
   newFormData.append("file", formData.get("video")!);
-  newFormData.append("upload_preset", "videos_preset");
+  // newFormData.append("upload_preset", "videos_preset");
+  newFormData.append("raw_convert", "google_speech");
+  newFormData.append("signature", signature);
+  newFormData.append("timestamp", timestamp.toString());
+  newFormData.append("api_key", env.CLOUDINARY_API_KEY);
+  // newFormData.append("public_id", `videos-${courseId}-${timestamp}`);
 
   const cloudName = env.CLOUDINARY_CLOUD_NAME;
   let resourceType = "video";
@@ -67,12 +81,19 @@ export async function addCourseContent(formData: FormData, courseId: string) {
     body: newFormData,
   });
 
-  const json = (await response.json()) as { secure_url: string };
+  const json = (await response.json()) as {
+    secure_url: string;
+  };
+
+  console.log(1, json);
+  console.log(2, json.info.raw_convert.google_speech);
 
   newFormData.delete("file");
   newFormData.append("file", formData.get("thumbnail")!);
   newFormData.delete("upload_preset");
   newFormData.append("upload_preset", "image_preset");
+  newFormData.delete("raw_convert");
+  newFormData.delete("signature");
 
   resourceType = "image";
   url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
@@ -81,7 +102,6 @@ export async function addCourseContent(formData: FormData, courseId: string) {
     method: "POST",
     body: newFormData,
   });
-
   const thumbJson = (await thumbRes.json()) as { secure_url: string };
 
   const videosOfCourse = await db.lesson.findMany({
