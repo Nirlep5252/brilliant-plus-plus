@@ -25,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { usePathname } from "next/navigation";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -65,7 +66,10 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export default function Navbar() {
+  const path = usePathname();
   const { data: session, status } = useSession();
+
+  if (path === "/studio" || path === "/onboarding") return null;
 
   return (
     <div className="flex w-full items-center justify-around p-2 shadow-md dark:border-b-2 dark:border-white">

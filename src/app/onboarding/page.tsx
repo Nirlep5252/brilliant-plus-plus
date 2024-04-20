@@ -3,13 +3,19 @@
 import { UserRole } from "@prisma/client";
 import { Loader2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { redirect, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
+import { Separator } from "~/components/ui/separator";
+import { api } from "~/trpc/react";
 
 export default function Onboarding() {
   const { data: session, status } = useSession();
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
+
+  const { mutate } = api.user.setRole.useMutation();
+  const router = useRouter();
 
   if (status === "loading") {
     return (
@@ -20,22 +26,28 @@ export default function Onboarding() {
   }
 
   if (status === "unauthenticated") {
-    return redirect("/api/auth/signin");
+    return router.push("/api/auth/signin");
   }
 
   if (session?.user.role !== UserRole.UNSET) {
-    return redirect(callbackUrl ?? "/");
+    return router.push(callbackUrl ?? "/");
   }
 
   return (
-    <div className="fixed z-50 flex h-screen w-screen flex-col items-center justify-center">
-      <div>Welcome to Edtech Platform! Please select your role.</div>
+    <div className="fixed z-50 flex h-screen w-screen flex-col items-center justify-center gap-10">
+      <div className="text-xl">
+        Welcome to Edtech Platform! Please select your role.
+      </div>
       <div className="flex items-center justify-center gap-4">
         <Button
           variant={"ghost"}
           className="flex h-40 flex-col items-center justify-center"
+          onClick={() => {
+            mutate({ role: "student" });
+            router.push(callbackUrl ?? "/");
+          }}
         >
-          <div className="text-xl">Learner</div>
+          <div className="text-3xl">Learner</div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -51,18 +63,23 @@ export default function Onboarding() {
             />
           </svg>
         </Button>
+        <Separator orientation="vertical" />
         <Button
           variant={"ghost"}
           className="flex h-40 flex-col items-center justify-center"
+          onClick={() => {
+            mutate({ role: "creator" });
+            router.push(callbackUrl ?? "/");
+          }}
         >
-          <div>Creator</div>
+          <div className="text-3xl">Creator</div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="h-6 w-6"
+            className="h-40 w-40"
           >
             <path
               strokeLinecap="round"
