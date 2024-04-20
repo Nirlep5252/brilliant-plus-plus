@@ -69,12 +69,7 @@ export default function Navbar() {
   const path = usePathname();
   const { data: session, status } = useSession();
 
-  if (
-    path.startsWith("/studio") ||
-    path === "/onboarding" ||
-    path === "/dashboard"
-  )
-    return <></>;
+  if (path.startsWith("/dashboard") || path === "/onboarding") return <></>;
 
   return (
     <div className="flex w-full items-center justify-around p-2 shadow-md dark:border-b-2 dark:border-foreground">

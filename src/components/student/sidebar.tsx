@@ -9,7 +9,7 @@ import Img from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function StudioSidebar() {
+export default function StudentSidebar() {
   const { data: session, status } = useSession();
   const path = usePathname();
 
@@ -30,17 +30,27 @@ export default function StudioSidebar() {
               className="w-full"
               variant={path === "/dashboard" ? "default" : "ghost"}
             >
-              Dashboard
+              Feed
             </Button>
           </Link>
-          <Link href="/dashboard/content">
+          <Link href="/dashboard/enrolled-courses">
             <Button
               className="w-full"
               variant={
-                path.startsWith("/dashboard/content") ? "default" : "ghost"
+                path === "/dashboard/enrolled-courses" ? "default" : "ghost"
               }
             >
-              Content
+              Enrolled Courses
+            </Button>
+          </Link>
+          <Link href="/dashboard/liked-courses">
+            <Button
+              className="w-full"
+              variant={
+                path === "/dashboard/liked-courses" ? "default" : "ghost"
+              }
+            >
+              Liked Courses
             </Button>
           </Link>
         </div>

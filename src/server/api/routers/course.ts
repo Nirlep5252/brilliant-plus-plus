@@ -69,4 +69,28 @@ export const courseRouter = createTRPCRouter({
     }
     return [];
   }),
+  deleteCourse: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.role !== UserRole.CREATOR) {
+        throw new Error("Only creators can delete courses");
+      }
+
+      await ctx.db.course.delete({
+        where: {
+          id: input.courseId,
+          creatorId: ctx.session.user.id,
+        },
+      });
+    }),
+  getCourseContent: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const lessons = await ctx.db.lesson.findMany({
+        where: {
+          courseId: input.courseId,
+        },
+      });
+      return lessons;
+    }),
 });

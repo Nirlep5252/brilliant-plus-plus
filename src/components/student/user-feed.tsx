@@ -1,13 +1,11 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { Button } from "~/components/ui/button";
-import Sidebar from "~/app/user-feed/sidebar";
-export default function UserFeedPage() {
+import { UserCourses } from "~/components/student/user-courses";
+export function UserFeedPage() {
   return (
     <div className="flex flex-row gap-4">
-      <div className="h-full w-[15%]">
-        <Sidebar />
-      </div>
-      <div className="h-full w-[85%]">
+      <div className="h-full">
         <Tabs
           defaultValue="Recommended"
           className="flex h-full w-full flex-col gap-4"
@@ -18,7 +16,7 @@ export default function UserFeedPage() {
             <TabsTrigger value="Top Courses">Top Courses</TabsTrigger>
           </TabsList>
           <TabsContent value="Recommended">
-            <div>Recommended Courses</div>
+            <UserCourses />
           </TabsContent>
           <TabsContent value="Course List">
             <div>Course List</div>

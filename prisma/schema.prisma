@@ -48,17 +48,17 @@ enum UserRole {
 }
 
 model User {
-    id                 String               @id @default(cuid())
-    name               String?
-    email              String?              @unique
-    emailVerified      DateTime?
-    image              String?
-    role               UserRole             @default(UNSET)
-    accounts           Account[]
-    sessions           Session[]
-    Course             Course[]
-    CourseUser         CourseUser[]
-    UserLessonProgress UserLessonProgress[]
+    id            String       @id @default(cuid())
+    name          String?
+    email         String?      @unique
+    emailVerified DateTime?
+    image         String?
+    role          UserRole     @default(UNSET)
+    accounts      Account[]
+    sessions      Session[]
+    Course        Course[]
+    CourseUser    CourseUser[]
+    LessonUser    LessonUser[]
 }
 
 model Course {
@@ -74,14 +74,15 @@ model Course {
 }
 
 model Lesson {
-    id                 String               @id @default(cuid())
-    name               String
-    description        String
-    videoUrl           String
-    videoIndex         Int
-    course             Course               @relation(references: [id], fields: [courseId])
-    courseId           String
-    UserLessonProgress UserLessonProgress[]
+    id                String       @id @default(cuid())
+    name              String
+    description       String
+    videoThumbnailUrl String
+    videoUrl          String
+    videoIndex        Int
+    course            Course       @relation(references: [id], fields: [courseId])
+    courseId          String
+    LessonUser        LessonUser[]
 }
 
 model CourseUser {
@@ -92,13 +93,12 @@ model CourseUser {
     userId   String
 }
 
-model UserLessonProgress {
-    id        String @id @default(cuid())
-    user      User   @relation(references: [id], fields: [userId])
-    userId    String
-    lesson    Lesson @relation(references: [id], fields: [lessonId])
-    lessonId  String
-    timestamp Int
+model LessonUser {
+    id       String @id @default(cuid())
+    lesson   Lesson @relation(references: [id], fields: [lessonId])
+    lessonId String
+    user     User   @relation(references: [id], fields: [userId])
+    userId   String
 }
 
 model VerificationToken {
