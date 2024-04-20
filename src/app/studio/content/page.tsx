@@ -22,7 +22,13 @@ export default async function MyContent() {
             </CardHeader>
             <CardContent>
               <div>
-                <Image src={course.thumbnail} alt={course.name} />
+                <Image
+                  src={course.thumbnail}
+                  alt={course.name}
+                  width={1920}
+                  height={1080}
+                  className="h-52 w-52"
+                />
                 <CardDescription>{course.description}</CardDescription>
               </div>
             </CardContent>

@@ -2,6 +2,7 @@
 
 import { env } from "~/env";
 import { getServerAuthSession } from "~/server/auth";
+import { db } from "~/server/db";
 
 export async function createCourse(formData: FormData, tags: string[]) {
   const session = await getServerAuthSession();
@@ -27,5 +28,18 @@ export async function createCourse(formData: FormData, tags: string[]) {
     })
   ).json()) as { secure_url: string };
 
-  console.log(response);
+  const course = await db.course.create({
+    data: {
+      name: formData.get("title") as string,
+      description: formData.get("description") as string,
+      thumbnail: response.secure_url,
+      tags,
+      creator: {
+        connect: {
+          id: session.user.id,
+        },
+      },
+    },
+  });
+  return course;
 }
