@@ -1,11 +1,6 @@
-import { UserRole } from "@prisma/client";
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
@@ -72,18 +67,15 @@ export const geminiRouter = createTRPCRouter({
         throw new Error("Lesson not found");
       }
       const transcript = await getTranscript(lesson.videoUrl);
-      console.log(transcript);
       promptParts.push(`Transcript: ${transcript}`);
       promptParts.push("MCQ Questions:  ");
       const prompt = promptParts.join("\n");
       const result = await model.generateContent(prompt);
       const response = result.response;
       const text = response.text();
-      console.log("GEMINI BULLSHIT", result, response, text);
       let stuff = text.split("\n");
       stuff = stuff.splice(1, stuff.length - 3);
       const jsonText = stuff.join("\n");
-      console.log("!!!!!!!!!", jsonText);
       return {
         questions: JSON.parse(stuff.join("\n")),
       };
