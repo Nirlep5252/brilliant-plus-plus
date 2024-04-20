@@ -69,13 +69,21 @@ export default function Navbar() {
   const path = usePathname();
   const { data: session, status } = useSession();
 
-  if (path === "/studio" || path === "/onboarding") return null;
+  if (
+    path.startsWith("/studio") ||
+    path === "/onboarding" ||
+    path === "/dashboard"
+  )
+    return <></>;
 
   return (
-    <div className="flex w-full items-center justify-around p-2 shadow-md dark:border-b-2 dark:border-white">
-      <div className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-2xl font-bold text-transparent">
+    <div className="flex w-full items-center justify-around p-2 shadow-md dark:border-b-2 dark:border-foreground">
+      <Link
+        href="/"
+        className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-2xl font-bold text-transparent"
+      >
         Edtech
-      </div>
+      </Link>
       <div className="flex gap-2 divide-x-2">
         <div className="px-2">
           <NavigationMenu>
@@ -161,10 +169,16 @@ export default function Navbar() {
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>
+                    My Account | {session.user.role}
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <Link href="profile">
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                  </Link>
+                  <Link href="profile">
+                    <DropdownMenuItem>Billing</DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem>Team</DropdownMenuItem>
                   <DropdownMenuItem>Subscription</DropdownMenuItem>
                 </DropdownMenuContent>

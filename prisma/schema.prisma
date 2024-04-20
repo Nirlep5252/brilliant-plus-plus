@@ -48,14 +48,57 @@ enum UserRole {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    role          UserRole  @default(UNSET)
-    accounts      Account[]
-    sessions      Session[]
+    id                 String               @id @default(cuid())
+    name               String?
+    email              String?              @unique
+    emailVerified      DateTime?
+    image              String?
+    role               UserRole             @default(UNSET)
+    accounts           Account[]
+    sessions           Session[]
+    Course             Course[]
+    CourseUser         CourseUser[]
+    UserLessonProgress UserLessonProgress[]
+}
+
+model Course {
+    id          String       @id @default(cuid())
+    name        String
+    tags        String[]
+    description String
+    thumbnail   String
+    creator     User         @relation(references: [id], fields: [creatorId])
+    creatorId   String
+    Lesson      Lesson[]
+    CourseUser  CourseUser[]
+}
+
+model Lesson {
+    id                 String               @id @default(cuid())
+    name               String
+    description        String
+    videoUrl           String
+    videoIndex         Int
+    course             Course               @relation(references: [id], fields: [courseId])
+    courseId           String
+    UserLessonProgress UserLessonProgress[]
+}
+
+model CourseUser {
+    id       String @id @default(cuid())
+    course   Course @relation(references: [id], fields: [courseId])
+    courseId String
+    user     User   @relation(references: [id], fields: [userId])
+    userId   String
+}
+
+model UserLessonProgress {
+    id        String @id @default(cuid())
+    user      User   @relation(references: [id], fields: [userId])
+    userId    String
+    lesson    Lesson @relation(references: [id], fields: [lessonId])
+    lessonId  String
+    timestamp Int
 }
 
 model VerificationToken {

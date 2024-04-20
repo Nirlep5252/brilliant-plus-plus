@@ -10,7 +10,7 @@ import { Separator } from "~/components/ui/separator";
 import { api } from "~/trpc/react";
 
 export default function Onboarding() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl");
 
@@ -42,8 +42,9 @@ export default function Onboarding() {
         <Button
           variant={"ghost"}
           className="flex h-40 flex-col items-center justify-center"
-          onClick={() => {
+          onClick={async () => {
             mutate({ role: "student" });
+            await update();
             router.push(callbackUrl ?? "/");
           }}
         >
@@ -67,8 +68,9 @@ export default function Onboarding() {
         <Button
           variant={"ghost"}
           className="flex h-40 flex-col items-center justify-center"
-          onClick={() => {
+          onClick={async () => {
             mutate({ role: "creator" });
+            await update();
             router.push(callbackUrl ?? "/");
           }}
         >
