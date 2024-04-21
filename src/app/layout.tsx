@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import Navbar from "~/components/Navbar";
 import { ThemeProvider } from "~/components/theme/theme-provider";
-import Providers from "./_components/providers";
+import Providers from "../components/providers";
 
 const inter = Inter({
   subsets: ["latin"],
