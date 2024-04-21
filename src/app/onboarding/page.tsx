@@ -11,7 +11,7 @@ import { api } from "~/trpc/react";
 export default function Onboarding() {
   const { data: session, status, update } = useSession();
 
-  const { mutate } = api.user.setRole.useMutation();
+  const { mutateAsync } = api.user.setRole.useMutation();
   const router = useRouter();
 
   if (status === "loading") {
@@ -40,7 +40,7 @@ export default function Onboarding() {
           variant={"ghost"}
           className="flex h-40 flex-col items-center justify-center"
           onClick={async () => {
-            mutate({ role: "student" });
+            await mutateAsync({ role: "student" });
             await update();
             router.push("/");
           }}
@@ -66,7 +66,7 @@ export default function Onboarding() {
           variant={"ghost"}
           className="flex h-40 flex-col items-center justify-center"
           onClick={async () => {
-            mutate({ role: "creator" });
+            await mutateAsync({ role: "creator" });
             await update();
             router.push("/");
           }}
