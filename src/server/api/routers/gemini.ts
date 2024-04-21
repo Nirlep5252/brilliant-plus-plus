@@ -7,7 +7,7 @@ import {
   HarmCategory,
 } from "@google/generative-ai";
 import { env } from "~/env";
-import { getTranscript } from "~/app/dashboard/course/[courseId]/[lessonId]/page";
+import { getTranscript } from "~/app/utils";
 
 const gemini = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 

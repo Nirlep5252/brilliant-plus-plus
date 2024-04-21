@@ -1,7 +1,7 @@
 "use client";
 
 import { type Lesson } from "@prisma/client";
-import { createTranscriptUrl, getTranscriptData } from "./page";
+import { createTranscriptUrl, getTranscriptData } from "~/app/utils";
 import { useEffect, useState } from "react";
 
 export function VideoPlayer(props: { lesson: Lesson }) {
