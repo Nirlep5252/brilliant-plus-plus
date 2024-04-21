@@ -1,4 +1,4 @@
-import { LessonUser, User } from "@prisma/client";
+import { type LessonUser, type User } from "@prisma/client";
 import Image from "next/image";
 
 export function Leaderboard({
@@ -17,7 +17,7 @@ export function Leaderboard({
         {leaderboard.slice(0, 10).map((user, index) => (
           <div key={user.id} className="flex items-center justify-center">
             <Image
-              src={user?.user.image || "/avatar.png"}
+              src={user?.user.image ?? "/avatar.png"}
               alt="Thumbnail"
               width={32}
               height={32}

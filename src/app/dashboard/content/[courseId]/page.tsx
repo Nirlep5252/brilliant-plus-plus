@@ -48,7 +48,7 @@ export default function Page({ params }: { params: { courseId: string } }) {
         </TabsList>
         <TabsContent value="Overview">
           <div className="h-[calc(100vh-5.5rem)] w-full rounded-lg border-2 border-border">
-            <form className="flex justify-between p-4" action={() => {}}>
+            <form className="flex justify-between p-4">
               <div className="flex w-96 flex-col gap-3 p-2">
                 <Label className="flex flex-col gap-2">
                   <span className="ml-1">Course Details</span>

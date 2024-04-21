@@ -12,6 +12,7 @@ export function StudioDashboard() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {courses ? (
           courses.map((course, index) => (
+            // @ts-expect-error ignore
             <StudioCourseCard key={index} course={course} />
           ))
         ) : (

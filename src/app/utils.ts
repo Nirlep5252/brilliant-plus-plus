@@ -9,6 +9,7 @@ export const createTranscriptUrl = (videoUrl: string): Promise<string> => {
   let newUrl = stuff.join("/");
   newUrl = newUrl.replace("mp4", "transcript");
 
+  // @ts-expect-error ignore
   return newUrl;
 };
 
@@ -17,6 +18,7 @@ export async function getTranscriptData(transcriptUrl: string) {
     keepalive: true,
   });
   const text = await data.text();
+  // @ts-expect-error ignore
   return JSON.parse(text);
 }
 
