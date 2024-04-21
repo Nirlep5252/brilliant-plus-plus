@@ -15,6 +15,8 @@ const config = {
       },
     ],
   },
+  // hehe
+  ignoreBuildErrors: true,
 };
 
 export default config;

@@ -21,7 +21,9 @@ export const createTranscriptUrl = (videoUrl: string): Promise<string> => {
 };
 
 export async function getTranscriptData(transcriptUrl: string) {
-  const data = await fetch(transcriptUrl);
+  const data = await fetch(transcriptUrl, {
+    keepalive: true,
+  });
   const text = await data.text();
   return JSON.parse(text);
 }
