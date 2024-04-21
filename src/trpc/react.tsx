@@ -33,15 +33,16 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
             process.env.NODE_ENV === "development" ||
             (op.direction === "down" && op.result instanceof Error),
         }),
-        // unstable_httpBatchStreamLink({
-        //   transformer: SuperJSON,
-        //   url: getBaseUrl() + "/api/trpc",
-        //   headers: () => {
-        //     const headers = new Headers();
-        //     headers.set("x-trpc-source", "nextjs-react");
-        //     return headers;
-        //   },
-        // }),
+        unstable_httpBatchStreamLink({
+          // @ts-expect-error ignore
+          transformer: SuperJSON,
+          url: getBaseUrl() + "/api/trpc",
+          headers: () => {
+            const headers = new Headers();
+            headers.set("x-trpc-source", "nextjs-react");
+            return headers;
+          },
+        }),
       ],
     }),
   );
