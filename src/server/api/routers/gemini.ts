@@ -106,7 +106,6 @@ export const geminiRouter = createTRPCRouter({
         });
       }
       return {
-        // @ts-expect-error ignore
         questions: JSON.parse(quizText),
       };
     }),

@@ -43,11 +43,9 @@ export const userRouter = createTRPCRouter({
       if (!quiz) {
         throw new Error("Quiz not found");
       }
-      // @ts-expect-error ignore
       const questions = JSON.parse(quiz) as any;
       let correct = 0;
       for (const question in questions) {
-        // @ts-expect-error ignore
         if (questions[question].answer === input.answers[question]) {
           correct++;
         }

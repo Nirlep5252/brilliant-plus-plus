@@ -18,7 +18,6 @@ export async function getTranscriptData(transcriptUrl: string) {
     keepalive: true,
   });
   const text = await data.text();
-  // @ts-expect-error ignore
   return JSON.parse(text);
 }
 
