@@ -1,34 +1,39 @@
 "use server";
 
 import { db } from "~/server/db";
+import { LessonQuizManager } from "./quiz-manager";
+import "node_modules/video-react/dist/video-react.css";
+import { VideoPlayer } from "./video-player";
+import { getServerAuthSession } from "~/server/auth";
 
-function createTranscriptUrl(videoUrl: string) {
-  console.log("ORIGINAL URL", videoUrl);
-  const stuff = videoUrl.split("/");
+export const createTranscriptUrl = (videoUrl: string): Promise<string> => {
+  const stuff: string[] = videoUrl.split("/");
   const i = stuff.findIndex((x) => x === "video");
   stuff[i] = "raw";
 
   const j = stuff.findIndex((x) => x.match(/^v[0-9]+$/));
-  stuff[j] = `v${parseInt(stuff[j].substring(1)) + 1}`;
+  stuff[j] = `v${parseInt(stuff[j]!.substring(1)) + 1}`;
 
   let newUrl = stuff.join("/");
   newUrl = newUrl.replace("mp4", "transcript");
 
-  console.log("BETTER CODE THAN PALASH", newUrl);
   return newUrl;
-}
+};
 
-async function getTranscriptData(transcriptUrl: string) {
+export async function getTranscriptData(transcriptUrl: string) {
   const data = await fetch(transcriptUrl);
-  console.log("DATA", data);
   const text = await data.text();
-  console.log("TEXT", text);
   return JSON.parse(text);
 }
 
 export async function getTranscript(videoUrl: string): Promise<string> {
-  const transcriptUrl = createTranscriptUrl(videoUrl);
-  const transcriptData = await getTranscriptData(transcriptUrl);
+  const transcriptUrl = await createTranscriptUrl(videoUrl);
+  console.log("TRANSCRIPT URL", transcriptUrl);
+  const transcriptData = (await getTranscriptData(transcriptUrl)) as {
+    transcript: string;
+    start: number;
+    end: number;
+  }[];
   let finalTranscript = "";
   for (const part of transcriptData) {
     finalTranscript += part.transcript;
@@ -41,6 +46,8 @@ export default async function Page({
 }: {
   params: { lessonId: string; courseId: string };
 }) {
+  const session = await getServerAuthSession();
+
   const lesson = await db.lesson.findFirst({
     where: {
       courseId: params.courseId,
@@ -54,15 +61,26 @@ export default async function Page({
       </div>
     );
   }
-  const transcript = await getTranscript(lesson.videoUrl);
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <div className="text-2xl font-bold">{lesson.name}</div>
-      <div className="text-md">{lesson.description}</div>
-      <video width={1080} height={720} controls preload="none">
-        <source src={lesson.videoUrl} type="video/mp4" />
-      </video>
-      Transcript: {transcript}
+    <div className="flex h-screen w-[calc(100vw-18rem)] flex-col items-center justify-center gap-4">
+      <div className="aspect-w-16 aspect-h-9">
+        <VideoPlayer lesson={lesson} />
+      </div>
+      <div className="flex w-full justify-between px-44">
+        <div>
+          <div className="text-2xl font-bold">{lesson.name}</div>
+          <div className="text-md">{lesson.description}</div>
+        </div>
+        <div>
+          <LessonQuizManager
+            props={{
+              lessonId: params.lessonId,
+              courseId: params.courseId,
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

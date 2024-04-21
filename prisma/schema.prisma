@@ -94,11 +94,13 @@ model CourseUser {
 }
 
 model LessonUser {
-    id       String @id @default(cuid())
-    lesson   Lesson @relation(references: [id], fields: [lessonId])
-    lessonId String
-    user     User   @relation(references: [id], fields: [userId])
-    userId   String
+    id        String  @id @default(cuid())
+    lesson    Lesson  @relation(references: [id], fields: [lessonId])
+    lessonId  String
+    user      User    @relation(references: [id], fields: [userId])
+    userId    String
+    quiz      String?
+    quizScore Int?
 }
 
 model VerificationToken {

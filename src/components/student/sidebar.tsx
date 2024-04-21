@@ -16,7 +16,7 @@ export default function StudentSidebar() {
   return (
     <div className="fixed flex h-screen w-72 flex-col justify-between bg-accent text-foreground">
       <div className="flex flex-col">
-        <div className="flex h-40 w-full flex-col items-center justify-center gap-2">
+        <div className="flex h-40 w-full items-center justify-center gap-2">
           <div>
             <GraduationCap size={60} />
           </div>
@@ -24,11 +24,15 @@ export default function StudentSidebar() {
             Edtech
           </div>
         </div>
-        <div className="flex h-52 w-full flex-col gap-2 p-6">
+        <div className="flex h-full w-full flex-col justify-center gap-2 p-6">
           <Link href="/dashboard">
             <Button
               className="w-full"
-              variant={path === "/dashboard" ? "default" : "ghost"}
+              variant={
+                path.startsWith("/dashboard/course") || path == "/dashboard"
+                  ? "default"
+                  : "ghost"
+              }
             >
               Feed
             </Button>
@@ -37,7 +41,9 @@ export default function StudentSidebar() {
             <Button
               className="w-full"
               variant={
-                path === "/dashboard/enrolled-courses" ? "default" : "ghost"
+                path.startsWith("/dashboard/enrolled-courses")
+                  ? "default"
+                  : "ghost"
               }
             >
               Enrolled Courses

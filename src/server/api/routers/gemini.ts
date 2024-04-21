@@ -44,7 +44,7 @@ const promptParts = [
   "MCQ Questions:  ",
   "Transcript:  You will generate 25 MCQ unique questions only with the correct answer mentioned below each question.",
   "MCQ Questions:  ",
-  "Transcript:  You will give the output in JSON format.",
+  "Transcript:  You will give the output in JSON format. It will be an array consisting of 25 objects that will have the following schema: { question: string, options: string[], answer: string }",
   "MCQ Questions:  ",
 ];
 
@@ -67,17 +67,46 @@ export const geminiRouter = createTRPCRouter({
         throw new Error("Lesson not found");
       }
       const transcript = await getTranscript(lesson.videoUrl);
+      console.log(transcript);
       promptParts.push(`Transcript: ${transcript}`);
       promptParts.push("MCQ Questions:  ");
       const prompt = promptParts.join("\n");
+      console.log(prompt);
       const result = await model.generateContent(prompt);
       const response = result.response;
       const text = response.text();
       let stuff = text.split("\n");
       stuff = stuff.splice(1, stuff.length - 3);
-      const jsonText = stuff.join("\n");
+      const quizText = stuff.join("\n");
+      console.log(quizText);
+
+      const lessonUser = await ctx.db.lessonUser.findFirst({
+        where: {
+          lessonId: input.lessonId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!lessonUser) {
+        await ctx.db.lessonUser.create({
+          data: {
+            lessonId: input.lessonId,
+            userId: ctx.session.user.id,
+            quiz: quizText,
+          },
+        });
+      } else {
+        await ctx.db.lessonUser.update({
+          where: {
+            id: lessonUser.id,
+          },
+          data: {
+            quiz: quizText,
+          },
+        });
+      }
       return {
-        questions: JSON.parse(stuff.join("\n")),
+        questions: JSON.parse(quizText),
       };
     }),
 });

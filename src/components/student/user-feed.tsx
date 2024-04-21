@@ -15,8 +15,12 @@ import TopBar from "~/components/student/topbar";
 
 export function UserFeedPage() {
   const { data: allCourses, isLoading } = api.course.getCourseList.useQuery();
-  const { data: enrolledCourses } = api.course.getMyCourses.useQuery();
-  const { mutate } = api.course.enrollCourse.useMutation();
+  const { data: enrolledCourse, refetch } = api.course.getMyCourses.useQuery();
+  const { mutate } = api.course.enrollCourse.useMutation({
+    onSuccess: async () => {
+      await refetch();
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -38,19 +42,19 @@ export function UserFeedPage() {
                 <h2 className="mb-2 text-xl font-semibold">{course.name}</h2>
                 <p className="mb-4 text-gray-600">{course.description}</p>
                 <div className="flex items-center justify-between">
-                  {/* <Link href={`/studio/content/${course.id}`}> */}
-                  <Button
-                    onClick={() => {
-                      mutate({ courseId: course.id });
-                    }}
-                  >
-                    {enrolledCourses?.find(
-                      (enrolledCourse) => enrolledCourse.id === course.id,
-                    )
-                      ? "Go to Course"
-                      : "Enroll Course"}
-                  </Button>
-                  {/* </Link> */}
+                  {enrolledCourse?.find((c) => c.id === course.id) ? (
+                    <Link href={`/dashboard/course/${course.id}`}>
+                      <Button>Go to Course</Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        mutate({ courseId: course.id });
+                      }}
+                    >
+                      Enroll Course
+                    </Button>
+                  )}
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       <LucideMoreVertical />

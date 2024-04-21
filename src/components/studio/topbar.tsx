@@ -32,9 +32,6 @@ export default function TopBar() {
   const [tags, setTags] = React.useState<string[]>([]);
   const [tagInput, setTagInput] = React.useState<string>("");
 
-  const [title, setTitle] = React.useState<string>("");
-  const [description, setDescription] = React.useState<string>("");
-
   return (
     <div className="w-full divide-y-2">
       <div className="flex h-28 items-center justify-between px-10">
@@ -60,7 +57,6 @@ export default function TopBar() {
                 <div className="ml-1">Title</div>
                 <Input
                   name="title"
-                  onChange={(e) => setTitle(e.target.value)}
                   type="text"
                   placeholder="Enter title here.."
                 />
@@ -69,7 +65,6 @@ export default function TopBar() {
                 <div className="ml-1">Description</div>
                 <Input
                   name="description"
-                  onChange={(e) => setDescription(e.target.value)}
                   type="text"
                   placeholder="Enter description here.."
                 />

@@ -103,6 +103,16 @@ export const courseRouter = createTRPCRouter({
       });
       return course;
     }),
+  getLessons: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const lessons = await ctx.db.lesson.findMany({
+        where: {
+          courseId: input.courseId,
+        },
+      });
+      return lessons;
+    }),
   updateCourse: protectedProcedure
     .input(
       z.object({
@@ -128,6 +138,45 @@ export const courseRouter = createTRPCRouter({
           tags: {
             set: input.tags,
           },
+        },
+      });
+    }),
+
+  getCourseUsers: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const courseUsers = await ctx.db.courseUser.findMany({
+        where: {
+          courseId: input.courseId,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return courseUsers.map((cu) => cu.user);
+    }),
+
+  getEnrolledUsers: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const courseUsers = await ctx.db.courseUser.findMany({
+        where: {
+          courseId: input.courseId,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return courseUsers.map((cu) => cu.user);
+    }),
+
+  revokeEnrollment: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.courseUser.deleteMany({
+        where: {
+          courseId: input.courseId,
+          userId: ctx.session.user.id,
         },
       });
     }),

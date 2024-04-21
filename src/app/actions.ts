@@ -85,9 +85,6 @@ export async function addCourseContent(formData: FormData, courseId: string) {
     secure_url: string;
   };
 
-  console.log(1, json);
-  console.log(2, json.info.raw_convert.google_speech);
-
   newFormData.delete("file");
   newFormData.append("file", formData.get("thumbnail")!);
   newFormData.delete("upload_preset");
