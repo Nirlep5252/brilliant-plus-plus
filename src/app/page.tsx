@@ -56,22 +56,13 @@ export default function Home() {
         animate="visible"
         custom={0.4}
       >
-        <Link href="/dashboard">
+        <Link href="/api/auth/signin">
           <Button
             className="px-10 py-6 text-lg transition-all duration-100 hover:shadow-[rgba(255,_255,_255,_0.5)_0px_25px_50px_-12px]"
             variant="default"
             size="lg"
           >
-            Let's Play!
-          </Button>
-        </Link>
-        <Link href="/practice">
-          <Button
-            className="border border-primary bg-transparent px-10 py-6 text-lg"
-            variant="secondary"
-            size="lg"
-          >
-            Practice
+            Let's dive in!
           </Button>
         </Link>
       </motion.div>

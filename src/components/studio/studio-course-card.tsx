@@ -16,11 +16,7 @@ export const StudioCourseCard = ({ course }: { course: Course }) => {
   });
 
   return (
-    <Link
-      key={course.id}
-      href={`/dashboard/studio/courses/${course.id}`}
-      passHref
-    >
+    <Link key={course.id} href={`/dashboard/courses/${course.id}`} passHref>
       <div className="cursor-pointer">
         <Card className="transform overflow-hidden rounded-lg transition duration-300 hover:scale-105 hover:shadow-xl">
           <div className="relative h-48">
