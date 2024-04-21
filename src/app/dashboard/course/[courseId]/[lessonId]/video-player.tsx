@@ -19,7 +19,7 @@ export function VideoPlayer(props: { lesson: Lesson }) {
 
   useEffect(() => {
     const transcriptUrl = createTranscriptUrl(props.lesson.videoUrl);
-    const transcriptUrl2 = createTranscriptUrl(props.lesson.videoUrl, true);
+    const transcriptUrl2 = createTranscriptUrl(props.lesson.videoUrl, 1);
     getTranscriptData(transcriptUrl)
       .then((transcriptData) => {
         setTranscriptData(transcriptData);
