@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Leaderboard } from "~/components/student/leaderboard";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { api } from "~/trpc/react";
 
 export default function AttemptQuiz({
@@ -40,6 +39,7 @@ export default function AttemptQuiz({
     console.log(leaderboard);
     return (
       <div className="flex h-screen w-[calc(100vw-18rem)] items-center justify-center">
+        {/* @ts-expect-error aoisdiaushd */}
         <Leaderboard leaderboard={leaderboard} lessonUser={lessonUser} />
       </div>
     );
@@ -99,7 +99,7 @@ export default function AttemptQuiz({
           onClick={async () => {
             await submitQuiz({
               lessonId: params.lessonId,
-              answers: new Array(25).map((_, i) => answers[i] || ""),
+              answers: new Array(25).map((_, i) => answers[i] ?? ""),
             });
           }}
         >

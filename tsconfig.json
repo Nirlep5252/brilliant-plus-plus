@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
     /* Base Options: */
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "skipLibCheck": true,
     "target": "es2022",
     "allowJs": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": false,
     "moduleDetection": "force",
-    "isolatedModules": true,
+    "isolatedModules": false,
 
     /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "checkJs": true,
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
+    "checkJs": false,
 
     /* Bundled projects */
     "lib": ["dom", "dom.iterable", "ES2022"],

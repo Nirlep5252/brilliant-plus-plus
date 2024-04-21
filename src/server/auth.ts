@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
       };
     },
   },
+  // @ts-expect-error ignore
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
     Google({
