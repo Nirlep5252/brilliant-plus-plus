@@ -46,7 +46,7 @@ export const userRouter = createTRPCRouter({
       const questions = JSON.parse(quiz) as any;
       let correct = 0;
       for (const question in questions) {
-        if (questions[question].answer === input.answers[question]) {
+        if (questions[question].answer == input.answers[question]) {
           correct++;
         }
       }

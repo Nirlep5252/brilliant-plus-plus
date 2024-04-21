@@ -18,11 +18,17 @@ export function VideoPlayer(props: { lesson: Lesson }) {
   >();
 
   useEffect(() => {
-    createTranscriptUrl(props.lesson.videoUrl).then((transcriptUrl) => {
-      getTranscriptData(transcriptUrl).then((transcriptData) => {
+    const transcriptUrl = createTranscriptUrl(props.lesson.videoUrl);
+    const transcriptUrl2 = createTranscriptUrl(props.lesson.videoUrl, true);
+    getTranscriptData(transcriptUrl)
+      .then((transcriptData) => {
         setTranscriptData(transcriptData);
+      })
+      .catch(() => {
+        getTranscriptData(transcriptUrl2).then((data) =>
+          setTranscriptData(data),
+        );
       });
-    });
   }, [props.lesson.videoUrl]);
 
   const [transcriptUrl, setTranscriptUrl] = useState<string>();
