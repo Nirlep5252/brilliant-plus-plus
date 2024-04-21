@@ -3,7 +3,6 @@
 import { UserRole } from "@prisma/client";
 import { Loader2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
@@ -11,8 +10,6 @@ import { api } from "~/trpc/react";
 
 export default function Onboarding() {
   const { data: session, status, update } = useSession();
-  const params = useSearchParams();
-  const callbackUrl = params.get("callbackUrl");
 
   const { mutate } = api.user.setRole.useMutation();
   const router = useRouter();
@@ -30,7 +27,7 @@ export default function Onboarding() {
   }
 
   if (session?.user.role !== UserRole.UNSET) {
-    return router.push(callbackUrl ?? "/");
+    return router.push("/");
   }
 
   return (
@@ -45,7 +42,7 @@ export default function Onboarding() {
           onClick={async () => {
             mutate({ role: "student" });
             await update();
-            router.push(callbackUrl ?? "/");
+            router.push("/");
           }}
         >
           <div className="text-3xl">Learner</div>
@@ -71,7 +68,7 @@ export default function Onboarding() {
           onClick={async () => {
             mutate({ role: "creator" });
             await update();
-            router.push(callbackUrl ?? "/");
+            router.push("/");
           }}
         >
           <div className="text-3xl">Creator</div>

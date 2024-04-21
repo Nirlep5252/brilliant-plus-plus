@@ -1,5 +1,7 @@
 "use server";
 
+/* eslint no-use-before-define: 0 */
+
 import { env } from "~/env";
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
