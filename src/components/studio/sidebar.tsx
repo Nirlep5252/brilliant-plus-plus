@@ -21,7 +21,7 @@ export default function StudioSidebar() {
             <GraduationCap size={60} />
           </div>
           <div className="text-center text-3xl font-bold text-foreground">
-            Edtech
+            Brilliant++
           </div>
         </div>
         <div className="flex h-52 w-full flex-col gap-2 p-6">

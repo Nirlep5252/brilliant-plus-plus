@@ -19,9 +19,6 @@ export default function AttemptQuiz({
   const { data: lessonUser, isLoading } = api.user.getLessonUser.useQuery({
     lessonId: params.lessonId,
   });
-  const { data: userRank } = api.user.getUserRank.useQuery({
-    lessonId: params.lessonId,
-  });
   const { data: leaderboard } = api.user.getUserLeaderboard.useQuery({
     lessonId: params.lessonId,
   });
@@ -36,11 +33,14 @@ export default function AttemptQuiz({
   if (!lessonUser?.quiz) {
     return <div>Quiz not found</div>;
   }
+  if (!leaderboard) {
+    return <div>is loading..</div>;
+  }
   if (typeof lessonUser.quizScore === "number") {
     console.log(leaderboard);
     return (
       <div className="flex h-screen w-[calc(100vw-18rem)] items-center justify-center">
-        <Leaderboard userRank={userRank} lessonUser={lessonUser} />
+        <Leaderboard leaderboard={leaderboard} lessonUser={lessonUser} />
       </div>
     );
   }

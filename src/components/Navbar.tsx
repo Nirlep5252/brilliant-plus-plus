@@ -13,7 +13,7 @@ import {
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
 import { ModeToggle } from "./theme/Theme-Toggle";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import Img from "next/image";
 
@@ -75,25 +75,24 @@ export default function Navbar() {
     <div className="flex w-full items-center justify-around p-2 shadow-md dark:border-b-2 dark:border-foreground">
       <Link
         href="/"
-        className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-2xl font-bold text-transparent"
+        className="bg-gradient-to-r from-primary to-foreground bg-clip-text text-2xl font-bold text-transparent"
       >
-        Edtech
+        Brilliant++
       </Link>
       <div className="flex gap-2 divide-x-2">
         <div className="px-2">
           <NavigationMenu>
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                    <li className="row-span-3">
+              {/* <NavigationMenuItem> */}
+              {/* <NavigationMenuTrigger>Getting started</NavigationMenuTrigger> */}
+              {/* <NavigationMenuContent> */}
+              {/* <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]"> */}
+              {/* <li className="row-span-3">
                       <NavigationMenuLink asChild>
                         <Link
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                           href="/"
                         >
-                          {/* <Icons.logo className="h-6 w-6" /> */}
                           <div className="mb-2 mt-4 text-lg font-medium">
                             shadcn/ui
                           </div>
@@ -104,8 +103,8 @@ export default function Navbar() {
                           </p>
                         </Link>
                       </NavigationMenuLink>
-                    </li>
-                    <ListItem href="/docs" title="Introduction">
+                    </li> */}
+              {/* <ListItem href="/docs" title="Introduction">
                       Re-usable components built using Radix UI and Tailwind
                       CSS.
                     </ListItem>
@@ -117,11 +116,11 @@ export default function Navbar() {
                       title="Typography"
                     >
                       Styles for headings, paragraphs, lists...etc
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
+                    </ListItem> */}
+              {/* </ul> */}
+              {/* </NavigationMenuContent> */}
+              {/* </NavigationMenuItem> */}
+              {/* <NavigationMenuItem>
                 <NavigationMenuTrigger>Components</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -136,11 +135,11 @@ export default function Navbar() {
                     ))}
                   </ul>
                 </NavigationMenuContent>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
               <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
+                <Link href="/dashboard" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Documentation
+                    Dashboard
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -168,14 +167,17 @@ export default function Navbar() {
                     My Account | {session.user.role}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <Link href="profile">
+                  {/* <Link href="profile">
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                   </Link>
                   <Link href="profile">
                     <DropdownMenuItem>Billing</DropdownMenuItem>
                   </Link>
                   <DropdownMenuItem>Team</DropdownMenuItem>
-                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                  <DropdownMenuItem>Subscription</DropdownMenuItem> */}
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Log Out
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

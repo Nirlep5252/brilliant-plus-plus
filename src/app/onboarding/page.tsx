@@ -36,7 +36,7 @@ export default function Onboarding() {
   return (
     <div className="fixed z-50 flex h-screen w-screen flex-col items-center justify-center gap-10">
       <div className="text-xl">
-        Welcome to Edtech Platform! Please select your role.
+        Welcome to Brilliant++! Please select your role.
       </div>
       <div className="flex items-center justify-center gap-4">
         <Button

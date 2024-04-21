@@ -1,17 +1,80 @@
+"use client";
+
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import { motion } from "framer-motion";
+
+const popUpAnimationVariants = {
+  hidden: {
+    opacity: 0,
+    translateY: "50px",
+    scale: 0.75,
+  },
+  visible: (custom: number) => {
+    return {
+      opacity: 1,
+      translateY: "-50px",
+      scale: 1,
+      transition: { delay: custom || 0 },
+    };
+  },
+};
 
 export default function Home() {
   return (
-    <div>
-      <div className="text-xlg">
-        Learn and Complete with People who are learning the same thing as you.
+    <div className="mashcode-landing -z-10 flex h-screen w-full flex-col items-center justify-center">
+      <div className="mashcode flex text-9xl font-bold">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={popUpAnimationVariants}
+        >
+          Brilliant
+        </motion.div>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={popUpAnimationVariants}
+          custom={0.1}
+        >
+          ++
+        </motion.div>
       </div>
-      <div>
-        This is a platform for learning and growing together. You can create
-        your own learning path and invite others to join you. You can also join
-        other people's learning paths.
-      </div>
+      <motion.div
+        variants={popUpAnimationVariants}
+        initial="hidden"
+        animate="visible"
+        custom={0.25}
+        className="text-4xl"
+      >
+        Compete & Conquer
+      </motion.div>
+      <motion.div
+        className="button-group mt-8 flex gap-4"
+        variants={popUpAnimationVariants}
+        initial="hidden"
+        animate="visible"
+        custom={0.4}
+      >
+        <Link href="/dashboard">
+          <Button
+            className="px-10 py-6 text-lg transition-all duration-100 hover:shadow-[rgba(255,_255,_255,_0.5)_0px_25px_50px_-12px]"
+            variant="default"
+            size="lg"
+          >
+            Let's Play!
+          </Button>
+        </Link>
+        <Link href="/practice">
+          <Button
+            className="border border-primary bg-transparent px-10 py-6 text-lg"
+            variant="secondary"
+            size="lg"
+          >
+            Practice
+          </Button>
+        </Link>
+      </motion.div>
     </div>
   );
 }

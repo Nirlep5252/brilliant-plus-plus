@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Edtech HackNUthon",
+  title: "Brilliant++",
   description: "~ Team Formality",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
