@@ -28,7 +28,12 @@ export const userRouter = createTRPCRouter({
       });
     }),
   submitQuiz: protectedProcedure
-    .input(z.object({ lessonId: z.string(), answers: z.array(z.string()) }))
+    .input(
+      z.object({
+        lessonId: z.string(),
+        answers: z.any(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const lessonUser = await ctx.db.lessonUser.findFirst({
         where: {
@@ -46,7 +51,7 @@ export const userRouter = createTRPCRouter({
       const questions = JSON.parse(quiz) as any;
       let correct = 0;
       for (const question in questions) {
-        if (questions[question].answer == input.answers[question]) {
+        if (questions[question].answer === input.answers[question]) {
           correct++;
         }
       }
@@ -58,6 +63,7 @@ export const userRouter = createTRPCRouter({
           quizScore: correct,
         },
       });
+      return correct;
     }),
   getUserLeaderboard: protectedProcedure
     .input(z.object({ lessonId: z.string() }))

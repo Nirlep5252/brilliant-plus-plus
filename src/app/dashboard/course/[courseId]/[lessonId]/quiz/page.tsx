@@ -69,6 +69,7 @@ export default function AttemptQuiz({
                 key={option}
                 className={`flex cursor-pointer items-center justify-start rounded-lg p-2 px-4 ${answers[currentQuestion] === option ? "border border-primary" : "border border-transparent"}`}
                 onClick={() => {
+                  console.log(answers, currentQuestion, option);
                   setAnswers({ ...answers, [currentQuestion]: option });
                 }}
               >
@@ -99,7 +100,7 @@ export default function AttemptQuiz({
           onClick={async () => {
             await submitQuiz({
               lessonId: params.lessonId,
-              answers: new Array(25).map((_, i) => answers[i] ?? ""),
+              answers,
             });
           }}
         >
