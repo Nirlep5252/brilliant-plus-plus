@@ -67,6 +67,7 @@ export const geminiRouter = createTRPCRouter({
         throw new Error("Lesson not found");
       }
       const transcript = await getTranscript(lesson.videoUrl);
+      if (!transcript) return;
       console.log(transcript);
       promptParts.push(`Transcript: ${transcript}`);
       promptParts.push("MCQ Questions:  ");

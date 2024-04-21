@@ -25,9 +25,9 @@ export function VideoPlayer(props: { lesson: Lesson }) {
         setTranscriptData(transcriptData);
       })
       .catch(() => {
-        getTranscriptData(transcriptUrl2).then((data) =>
-          setTranscriptData(data),
-        );
+        getTranscriptData(transcriptUrl2)
+          .then((data) => setTranscriptData(data))
+          .catch((err) => {});
       });
   }, [props.lesson.videoUrl]);
 
@@ -60,20 +60,20 @@ export function VideoPlayer(props: { lesson: Lesson }) {
     setTranscriptUrl(vttUrl);
   }, [transcriptData]);
 
-  if (!transcriptData) {
-    return <>Loading...</>;
-  }
-
   return (
     <video controls className="rounded-lg">
       <source src={props.lesson.videoUrl} type="video/mp4" />
-      <track
-        default
-        src={transcriptUrl}
-        kind="captions"
-        srcLang="en"
-        label="English"
-      />
+      {transcriptData ? (
+        <track
+          default
+          src={transcriptUrl}
+          kind="captions"
+          srcLang="en"
+          label="English"
+        />
+      ) : (
+        <></>
+      )}
     </video>
   );
 }

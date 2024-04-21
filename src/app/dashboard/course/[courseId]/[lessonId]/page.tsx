@@ -4,15 +4,12 @@ import { db } from "~/server/db";
 import { LessonQuizManager } from "./quiz-manager";
 import "node_modules/video-react/dist/video-react.css";
 import { VideoPlayer } from "./video-player";
-import { getServerAuthSession } from "~/server/auth";
 
 export default async function Page({
   params,
 }: {
   params: { lessonId: string; courseId: string };
 }) {
-  const session = await getServerAuthSession();
-
   const lesson = await db.lesson.findFirst({
     where: {
       courseId: params.courseId,
