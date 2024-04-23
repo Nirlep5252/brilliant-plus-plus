@@ -1,4 +1,5 @@
 import { UserRole } from "@prisma/client";
+import { get } from "http";
 import { z } from "zod";
 
 import {
@@ -179,5 +180,83 @@ export const courseRouter = createTRPCRouter({
           userId: ctx.session.user.id,
         },
       });
+    }),
+
+  getCourseFromTag: protectedProcedure
+    .input(z.object({ tag: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const courses = await ctx.db.course.findMany({
+        where: {
+          tags: {
+            hasSome: [input.tag],
+          },
+        },
+      });
+      return courses;
+    }),
+
+  getCourseFromName: protectedProcedure
+    .input(z.object({ name: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const courses = await ctx.db.course.findMany({
+        where: {
+          name: input.name,
+        },
+      });
+      return courses;
+    }),
+
+  getCourseFromCreator: protectedProcedure
+    .input(z.object({ creatorId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const courses = await ctx.db.course.findMany({
+        where: {
+          creatorId: input.creatorId,
+        },
+      });
+      return courses;
+    }),
+
+    getCourseWithUsers: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const course = await ctx.db.course.findUnique({
+        where: {
+          id: input.courseId,
+        },
+        include: {
+          users: true,
+        },
+      });
+      return course;
+    }),
+
+    getCourseWithLessons: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const course = await ctx.db.course.findUnique({
+        where: {
+          id: input.courseId,
+        },
+        include: {
+          lessons: true,
+        },
+      });
+      return course;
+    }),
+
+    getCourseWithUsersAndLessons: protectedProcedure
+    .input(z.object({ courseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const course = await ctx.db.course.findUnique({
+        where: {
+          id: input.courseId,
+        },
+        include: {
+          users: true,
+          lessons: true,
+        },
+      });
+      return course;
     }),
 });
