@@ -5,18 +5,6 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*",
-        port: "",
-      },
-    ],
-  },
-  // hehe
-  ignoreBuildErrors: true,
-};
+const config = {};
 
 export default config;

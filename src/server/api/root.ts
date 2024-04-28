@@ -1,7 +1,5 @@
-import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { userRouter } from "./routers/user";
-import { courseRouter } from "./routers/course";
-import { geminiRouter } from "./routers/gemini";
+import { postRouter } from "@/server/api/routers/post";
+import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
  * This is the primary router for your server.
@@ -9,9 +7,7 @@ import { geminiRouter } from "./routers/gemini";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  user: userRouter,
-  course: courseRouter,
-  bestFriend: geminiRouter,
+  post: postRouter,
 });
 
 // export type definition of API

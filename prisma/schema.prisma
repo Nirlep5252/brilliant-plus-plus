@@ -14,6 +14,18 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Post {
+    id        Int      @id @default(autoincrement())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+
+    @@index([name])
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -41,66 +53,15 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum UserRole {
-    UNSET
-    CREATOR
-    STUDENT
-}
-
 model User {
-    id            String       @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String?
-    email         String?      @unique
+    email         String?   @unique
     emailVerified DateTime?
     image         String?
-    role          UserRole     @default(UNSET)
     accounts      Account[]
     sessions      Session[]
-    Course        Course[]
-    CourseUser    CourseUser[]
-    LessonUser    LessonUser[]
-}
-
-model Course {
-    id          String       @id @default(cuid())
-    name        String
-    tags        String[]
-    description String
-    thumbnail   String
-    creator     User         @relation(references: [id], fields: [creatorId])
-    creatorId   String
-    Lesson      Lesson[]
-    CourseUser  CourseUser[]
-}
-
-model Lesson {
-    id                String       @id @default(cuid())
-    name              String
-    description       String
-    videoThumbnailUrl String
-    videoUrl          String
-    videoIndex        Int
-    course            Course       @relation(references: [id], fields: [courseId])
-    courseId          String
-    LessonUser        LessonUser[]
-}
-
-model CourseUser {
-    id       String @id @default(cuid())
-    course   Course @relation(references: [id], fields: [courseId])
-    courseId String
-    user     User   @relation(references: [id], fields: [userId])
-    userId   String
-}
-
-model LessonUser {
-    id        String  @id @default(cuid())
-    lesson    Lesson  @relation(references: [id], fields: [lessonId])
-    lessonId  String
-    user      User    @relation(references: [id], fields: [userId])
-    userId    String
-    quiz      String?
-    quizScore Int?
+    posts         Post[]
 }
 
 model VerificationToken {
