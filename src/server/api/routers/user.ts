@@ -17,6 +17,7 @@ export const userRouter = createTRPCRouter({
       });
       return {};
     }),
+
   getLessonUser: protectedProcedure
     .input(z.object({ lessonId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -65,6 +66,7 @@ export const userRouter = createTRPCRouter({
       });
       return correct;
     }),
+
   getUserLeaderboard: protectedProcedure
     .input(z.object({ lessonId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -83,6 +85,7 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
+
   getUserRank: protectedProcedure
     .input(z.object({ lessonId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -111,4 +114,46 @@ export const userRouter = createTRPCRouter({
       });
       return users.findIndex((u) => u.id === user.id) + 1;
     }),
+
+  getLessonUsers: protectedProcedure
+    .input(z.object({ lessonId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const lessonUsers = await ctx.db.lessonUser.findMany({
+        where: {
+          lessonId: input.lessonId,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return lessonUsers.map((lu) => lu.user);
+    }),
+
+    getLessonsbyUser: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input})=>{
+      const lessonUsers = await ctx.db.lessonUser.findMany({
+        where: {
+          userId: input.userId,
+        },
+        include: {
+          lesson: true,
+        },
+      });
+      return lessonUsers.map((lu) => lu.lesson);
+    }),
+
+    updateUserName: protectedProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation( async ({ ctx, input}) =>{
+      await ctx.db.user.update({
+        where:{
+          id: ctx.session.user.id,
+        },
+        data:{
+          name: input.name,
+        },
+      })
+    })
+
 });
