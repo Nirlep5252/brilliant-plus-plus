@@ -216,47 +216,4 @@ export const courseRouter = createTRPCRouter({
       });
       return courses;
     }),
-
-    getCourseWithUsers: protectedProcedure
-    .input(z.object({ courseId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const course = await ctx.db.course.findUnique({
-        where: {
-          id: input.courseId,
-        },
-        include: {
-          users: true,
-        },
-      });
-      return course;
-    }),
-
-    getCourseWithLessons: protectedProcedure
-    .input(z.object({ courseId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const course = await ctx.db.course.findUnique({
-        where: {
-          id: input.courseId,
-        },
-        include: {
-          lessons: true,
-        },
-      });
-      return course;
-    }),
-
-    getCourseWithUsersAndLessons: protectedProcedure
-    .input(z.object({ courseId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const course = await ctx.db.course.findUnique({
-        where: {
-          id: input.courseId,
-        },
-        include: {
-          users: true,
-          lessons: true,
-        },
-      });
-      return course;
-    }),
 });
