@@ -10,41 +10,45 @@ import { env } from "~/env";
 import { getTranscript } from "~/app/utils";
 
 const gemini = new GoogleGenerativeAI(env.GEMINI_API_KEY);
+// const model = gemini.getGenerativeModel({
+//   model: "gemini-1.5-flash-latest",
+// });
+const generationConfig = {
+  temperature: 1,
+  topP: 0.95,
+  topK: 64,
+  maxOutputTokens: 8196,
+  responseMimeType: "application/json",
+};
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+];
 
 const model = gemini.getGenerativeModel({
-  model: "gemini-1.5-pro-latest",
-  generationConfig: {
-    temperature: 1,
-    topP: 0.95,
-    topK: 0,
-    maxOutputTokens: 8196,
-  },
-  safetySettings: [
-    {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_NONE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-      threshold: HarmBlockThreshold.BLOCK_NONE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-      threshold: HarmBlockThreshold.BLOCK_NONE,
-    },
-    {
-      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.BLOCK_NONE,
-    },
-  ],
+  model: "gemini-1.5-flash-latest",
+  generationConfig,
+  safetySettings,
 });
 
 const promptParts = [
-  "Transcript:  You are an educator and you have just finished giving a lesson to your students. Now, you will generate MCQ questions only for your students to evaluate them based on your lecture.",
+  "Transcript:  You are an educator and you have just finished giving a lecture to your students. Now, you will generate MCQ questions only for your students to evaluate them based on your lecture.",
   "MCQ Questions:  ",
-  "Transcript:  You will generate 25 MCQ unique questions only with the correct answer mentioned below each question.",
-  "MCQ Questions:  ",
-  "Transcript:  You will give the output in JSON format. It will be an array consisting of 25 objects that will have the following schema: { question: string, options: string[], answer: string }",
+  "Transcript:  The output should be a JSON array of objects having properties question, options, and answer.",
   "MCQ Questions:  ",
 ];
 
@@ -76,10 +80,10 @@ export const geminiRouter = createTRPCRouter({
       const result = await model.generateContent(prompt);
       const response = result.response;
       const text = response.text();
-      let stuff = text.split("\n");
-      stuff = stuff.splice(1, stuff.length - 3);
-      const quizText = stuff.join("\n");
-      console.log(quizText);
+      // let stuff = text.split("\n");
+      // stuff = stuff.splice(1, stuff.length - 3);
+      // const quizText = stuff.join("\n");
+      console.log(text);
 
       const lessonUser = await ctx.db.lessonUser.findFirst({
         where: {
@@ -93,7 +97,7 @@ export const geminiRouter = createTRPCRouter({
           data: {
             lessonId: input.lessonId,
             userId: ctx.session.user.id,
-            quiz: quizText,
+            quiz: text,
           },
         });
       } else {
@@ -102,12 +106,12 @@ export const geminiRouter = createTRPCRouter({
             id: lessonUser.id,
           },
           data: {
-            quiz: quizText,
+            quiz: text,
           },
         });
       }
       return {
-        questions: JSON.parse(quizText),
+        questions: JSON.parse(text),
       };
     }),
 });
