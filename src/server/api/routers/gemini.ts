@@ -50,6 +50,8 @@ const promptParts = [
   "MCQ Questions:  ",
   "Transcript:  The output should be a JSON array of objects having properties question, options, and answer.",
   "MCQ Questions:  ",
+  "Transcript:  The output should contain at least 10 questions.",
+  "MCQ Questions:  ",
 ];
 
 export const geminiRouter = createTRPCRouter({
