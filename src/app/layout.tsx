@@ -14,7 +14,7 @@ const inter = Inter({
 
 export const metadata = {
   title: "Brilliant++",
-  description: "~ Team Formality",
+  description: "",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
